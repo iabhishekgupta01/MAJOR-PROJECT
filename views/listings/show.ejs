@@ -1,0 +1,127 @@
+<% layout("/layouts/boilerplate") %>
+<body>
+<div class="show-page">
+  <h3><%=list.title%></h3>
+  <div class="show-image-div">
+    <img src="<%=list.image.url%>" class="card-img-top show-image" alt="listing_image">
+  </div>
+  <p class="show-title">Owned by 
+    <i><%=list.owner.username%></i>
+  </p>
+  <p>
+    <%=list.description%>
+  </p>
+  <p class="show-price">&#8377;<%=list.price.toLocaleString("en-in")%></p>
+  <p>
+    <%=list.location%>
+  </p>
+  <p>
+    <%=list.country%>
+  </p>
+  <% if( !currUser || !currUser._id.equals(list.owner._id)){%>
+    <hr/>
+  <%}%>
+  
+  <% if( currUser && currUser._id.equals(list.owner._id)){%>
+  
+  <div class="show-btn">
+    
+    <a href="/listings/<%=list._id%>/edit"><button class="btn btn-dark edit-btn">Edit Listing</button></a>
+
+
+    <button type="button" class="btn btn-dark delete-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Delete
+    </button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Delete Listing</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            Are you sure to delete your listing ?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <form method="post" action="/listings/<%=list._id%>?_method=DELETE">
+              <button type="submit" class="btn btn-dark">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> 
+
+  </div>
+  <%}%>
+  
+  
+  <div class="rating">
+    <% if(currUser){%>
+    <br/><br/>
+    <h4>Leave a review</h4>
+    <form method="post" action="/listings/<%=list._id%>/reviews" class="needs-validation" novalidate>
+      <div class="rating-div">
+        <label for="rating">Rating</label>
+        <fieldset class="starability-slot">
+          <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+          <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+
+
+      <div class="comment-div mt-1">
+        <label for="comment" class="form-label" >Comment</label>
+        <textarea id="comment" name="review[comment]" placeholder="add comments here" cols="30" rows="5" class="form-control" type="text" required></textarea>
+        <div class="invalid-feedback">please add a comment</div>
+      </div>
+      <br/>
+      <button class="btn btn-outline-dark">Submit</button>
+    </form>
+    <hr/>
+    <%}%>
+    
+    <p><b>All reviews</b></p>
+    <div class="review-div">
+      <% for(review of list.reviews){%>
+        <div class="review-card card">
+          <h6 class="card-title">@<%=review.author.username%></h6>
+          <p class="starability-result" data-rating="<%=review.rating%>"></p>
+        
+          <p class="card-text"><%=review.comment%></p>
+
+          <form class="mb-1 mt-1 review-delete" method="post" action="/listings/<%=list._id%>/reviews/<%=review._id%>?_method=DELETE">
+          <% if( currUser && currUser._id.equals(review.author._id)){%>
+            <button class="btn btn-sm btn-dark del-review">Delete</button>
+            <%}%>
+          
+          <% if( !currUser || !currUser._id.equals(review.author._id)){%>
+              <button class="btn btn-sm btn-outline-dark del-review"  disabled>Delete</button>
+          <%}%>  
+          </form>
+        </div>
+      <%}%>
+    </div>
+    
+  </div>
+
+</div>
+
+  
+</body>
+
+    
+
+
+
+
+
+
