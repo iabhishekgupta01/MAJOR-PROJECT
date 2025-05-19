@@ -2,6 +2,8 @@ const mongoose=require("mongoose");
 const Listing= require("../models/listing.js");
 const initData=require("./data.js"); 
 
+
+
 let mongo_url="mongodb://127.0.0.1:27017/wanderlust";
 main()
 .then(()=>{
