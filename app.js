@@ -45,10 +45,10 @@ let initDB= async ()=>{
     
 }
 
-app.get("addData",async(req,res)=>{
+app.get("/addData",async(req,res)=>{
     initDB();
     res.send("data saved !!!!!");
-})
+});
 
 
 
